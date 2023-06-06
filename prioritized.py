@@ -30,12 +30,37 @@ class PrioritizedPlanningSolver(object):
         result = []
         constraints = []
 
+
+        # Constraint for Task 1.2
+        # constraints = [{'agent': 0,'loc': [(1,5)],'timestep': 4}]
+        
+        # Constraint for Task 1.3
+        # constraints = [{'agent': 1,'loc': [(1,2),(1,3)],'timestep': 1}]
+        
+        # Constraints for Task 1.4
+        # constraints = [{'agent': 0,'loc': [(1,5)],'timestep': 10},
+        #                 {'agent': 0,'loc': [(1,3),(1,4)],'timestep': 5},
+        #                 {'agent': 0,'loc': [(1,3),(1,4)],'timestep': 7},
+        #                 {'agent': 0,'loc': [(1,2),(1,3)],'timestep': 2}]
+
+
+        # Constraints for Task 1.5
+        # constraints = [{'agent': 1,'loc': [(1,4)],'timestep': 2},
+        #                 {'agent': 1,'loc': [(1,3),(1,2)],'timestep': 2}]
+
+
         for i in range(self.num_of_agents):  # Find path for each agent
+
+            
             path = a_star(self.my_map, self.starts[i], self.goals[i], self.heuristics[i],
                           i, constraints)
+
+
             if path is None:
                 raise BaseException('No solutions')
             result.append(path)
+
+
 
             ##############################
             # Task 2: Add constraints here
@@ -47,7 +72,44 @@ class PrioritizedPlanningSolver(object):
 
             ##############################
 
+
+            # if len(constraint_table.keys()) != 0:
+            #     if next_time > max(constraint_table.keys()):
+            #         next_time = max(constraint_table.keys())
+
+            # print(path)
+
+            for next_agent in range(self.num_of_agents):
+
+
+                for i in range (0,10):
+
+                #     # Task 2.3 Adding goal constraints and max timestep allowed was 10
+
+                    constraints.append({'agent' : next_agent, 'loc' : [path[len(path) - 1]], 'timestep' : len(path)+i - 1})
+                
+                for nPath in range(len(path)):
+                    # print(path[len(path) - 1])
+
+                    # constraints.append({'agent' : next_agent, 'loc' : [path[len(path) - 1]], 'timestep' : nPath})
+
+                    # constraints.append({'agent' : next_agent, 'loc' : [path[len(path) - 1]], 'timestep' : nPath+len(path)})
+
+                    # Task 2.1 Vertex Constraints
+                    if next_agent != i:
+
+                        constraints.append({'agent' : next_agent, 'loc' : [path[nPath]], 'timestep' : nPath})
+
+
+                        # Task 2.2 Edge Constraints
+
+                        if nPath > 0:
+                            constraints.append({'agent' : next_agent, 'loc' : [path[nPath],path[nPath-1]], 'timestep' : nPath})
+
+
+
         self.CPU_time = timer.time() - start_time
+        # print(constraints)
 
         print("\n Found a solution! \n")
         print("CPU time (s):    {:.2f}".format(self.CPU_time))

@@ -109,6 +109,8 @@ class Animation:
                 d2 = agents_array[j]
                 pos1 = np.array(d1.center)
                 pos2 = np.array(d2.center)
+                # Visualize the position for Task 1.4
+                # print("agent ({}) is at ({}) ---- agent ({}) is at  ({}) at time ({})".format(i,pos1,j,pos2,t/10))
                 if np.linalg.norm(pos1 - pos2) < 0.7:
                     d1.set_facecolor('red')
                     d2.set_facecolor('red')
